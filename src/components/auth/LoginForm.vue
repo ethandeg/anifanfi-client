@@ -5,14 +5,15 @@
       <div class="container">
         <div class="columns is-centered">
           <div class="column is-5-tablet is-4-desktop is-3-widescreen">
-            <form action="" class="box">
+            <form action="" class="box" @submit.prevent="handleLogin">
               <div class="field">
-                <label for="" class="label">Email</label>
+                <label for="" class="label">Username</label>
                 <div class="control has-icons-left">
                   <input
-                    type="email"
-                    placeholder="e.g. bobsmith@gmail.com"
+                    type="text"
+                    placeholder="e.g. username1"
                     class="input"
+                    v-model="username"
                     required
                   />
                   <span class="icon is-small is-left">
@@ -27,6 +28,7 @@
                     type="password"
                     placeholder="*******"
                     class="input"
+                    v-model="password"
                     required
                   />
                   <span class="icon is-small is-left">
@@ -52,12 +54,28 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "LoginForm",
+  data(){
+    return {
+      username: "",
+      password: ""
+    }
+  },
   computed: {
     ...mapState(["auth"]),
   },
+
+  methods: {
+    ...mapActions('auth', ['loginUser']),
+    async handleLogin(){
+      const res = await this.loginUser({username: this.username, password: this.password});
+    }
+  },
+  mounted(){
+    // this.registerUser({username: 'iamuser', password: 'this my pass', email: "email@gmail.com"});
+  }
 };
 </script>
 

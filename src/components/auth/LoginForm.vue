@@ -1,5 +1,5 @@
 <template>
-  <pre>{{ auth.test.join(",") }}</pre>
+  <!-- <pre>{{ auth.test.join(",") }}</pre> -->
   <section class="hero is-primary is-fullheight">
     <div class="hero-body">
       <div class="container">
@@ -57,25 +57,31 @@
 import { mapActions, mapState } from "vuex";
 export default {
   name: "LoginForm",
-  data(){
+  data() {
     return {
       username: "",
-      password: ""
-    }
+      password: "",
+    };
   },
   computed: {
     ...mapState(["auth"]),
   },
 
   methods: {
-    ...mapActions('auth', ['loginUser']),
-    async handleLogin(){
-      const res = await this.loginUser({username: this.username, password: this.password});
-    }
+    ...mapActions("auth", ["loginUser"]),
+    async handleLogin() {
+      const res = await this.loginUser({
+        username: this.username,
+        password: this.password,
+      });
+      if (res.status === 200) {
+        this.$router.push({ name: "home" });
+      }
+    },
   },
-  mounted(){
+  mounted() {
     // this.registerUser({username: 'iamuser', password: 'this my pass', email: "email@gmail.com"});
-  }
+  },
 };
 </script>
 

@@ -1,11 +1,34 @@
 <template>
   <nav>
+    <!-- <h1>{{ isAuthenticated ? "hey" : "no" }}</h1> -->
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>
-    <router-link to="/login">Login</router-link>
+    <router-link v-if="!getIsAuth" to="/login">Login</router-link>
+    <a v-else to="/login" @click.prevent="handleLogout">Logout</a>
   </nav>
   <router-view />
 </template>
+
+<script>
+import { mapActions, mapGetters } from "vuex";
+export default {
+  name: "App",
+  computed: {
+    ...mapGetters("auth", ["getIsAuth"]),
+  },
+  methods: {
+    ...mapActions("auth", ["logoutUser", "checkForUser"]),
+    handleLogout() {
+      this.logoutUser();
+      this.$router.push({ name: "login" });
+    },
+  },
+  created() {
+    this.checkForUser();
+  },
+};
+</script>
+
 
 <style lang="scss" scoped>
 #app {
